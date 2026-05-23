@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # Container do Banco de Dados (PostgreSQL)
+  postgres:
+    image: postgres:15-alpine
+    container_name: gd_postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: gd_password_2026
+      POSTGRES_DB: garcom_digital_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - gd-network
+
+  # Container do Frontend (React + Vite)
+  web:
+    build: ./web
+    container_name: gd_web
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./web:/usr/src/app
+      - /usr/src/app/node_modules # Evita conflito de node_modules com a máquina física
+    depends_on:
+      - postgres
+    networks:
+      - gd-network
+
+volumes:
+  pgdata:
+
+networks:
+  gd-network:
+    driver: bridge
