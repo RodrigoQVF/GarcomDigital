@@ -1,0 +1,86 @@
+.kds-card {
+  background-color: #202024;
+  border-radius: 6px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  border-left: 5px solid #ff9000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.card-preparando {
+  border-left-color: #04d361;
+}
+
+.card-cancelado {
+  border-left-color: #c53030;
+  text-decoration: line-through;
+  background-color: #2a2a2a;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.card-mesa {
+  font-weight: bold;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.card-time {
+  font-size: 12px;
+  color: #737380;
+}
+
+.card-body {
+  flex: 1;
+  margin-bottom: 15px;
+}
+
+.card-item {
+  margin: 6px 0;
+  font-size: 15px;
+  color: #e1e1e6;
+}
+
+.card-item strong {
+  color: #ff9000;
+  margin-right: 5px;
+}
+
+.card-preparando .card-item strong {
+  color: #04d361;
+}
+
+.card-btn {
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 14px;
+}
+
+
+.btn-pendente {
+  background-color: #ff9000;
+  color: #121214;
+}   
+
+.btn-pendente:hover {
+  background-color: #de7f00;
+}
+
+.btn-preparando {
+  background-color: #04d361;
+  color: #121214;
+}
+
+.btn-preparando:hover {
+  background-color: #029e47;
+}
