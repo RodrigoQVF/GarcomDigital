@@ -71,6 +71,7 @@
   flex-direction: column;
   min-width: 320px;
   border: 1px solid #29292e;
+  transition: all 0.2s ease;
 }
 
 .column-header {
@@ -92,6 +93,14 @@
   gap: 15px;
   overflow-y: auto;
   flex: 1;
+}
+
+/* Feedback visual premium ao arrastar card sobre a coluna */
+.kds-column.drag-over {
+  background-color: #202024;
+  border: 1px dashed #ff9000; /* Destaque na cor tema */
+  transform: scale(1.01);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 
