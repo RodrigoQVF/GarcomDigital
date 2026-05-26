@@ -1,5 +1,6 @@
 import { useDraggable } from '@dnd-kit/core';
 import type { Pedido } from "../../interfaces/types";
+import MenuCard from '../../components/MenuCard/MenuCard';
 import './Cards.css'
 
 const statusClasses = {
@@ -47,7 +48,10 @@ export default function Cards({pedido, onStatusChange, isOverlay = false}: pedid
         {...(isOverlay ? {} : listeners)}
         {...(isOverlay ? {} : attributes)}
     >
-        #{pedido.id}
+        <div className="card-top"> 
+            <span>#{pedido.id}</span>
+            <span><MenuCard/></span>
+        </div>
         <div className="card-top">
             <span className="card-mesa">MESA {pedido.mesa}</span>
             <span className="card-time">{pedido.horario}</span>
