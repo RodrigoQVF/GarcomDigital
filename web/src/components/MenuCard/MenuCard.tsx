@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { MoreVertical } from 'lucide-react'
 import './MenuCard.css'
 
 export default function MenuCard () {
@@ -24,7 +25,9 @@ const [isOpen, setIsOpen] = useState<boolean>(false);
 
     return (
         <div className="menu-card" ref={menuRef}>
-            <button onClick={handleButtonMenu}>aperte-me</button>
+            <button className="menu-openbtn" onClick={handleButtonMenu}>
+                <MoreVertical size={20} color="#fff" />
+            </button>
             {isOpen ? 
             <div className='menu-btns'>
                 <button>

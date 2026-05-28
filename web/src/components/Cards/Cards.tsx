@@ -10,13 +10,6 @@ const statusClasses = {
     'CANCELADO': 'cancelado'
 };
 
-const buttonText = {
-    'PREPARANDO': 'Concluir',
-    'PENDENTE': 'Preparar',
-    'CONCLUIDO': '',
-    'CANCELADO': ''
-}
-
 interface pedidoCard {
     pedido: Pedido,
     onStatusChange: (id: string | number, statusAtual: Pedido['status']) => void;
@@ -63,17 +56,12 @@ export default function Cards({pedido, onStatusChange, isOverlay = false}: pedid
             </p>
             ))}
         </div>
-        {pedido.status !== 'CANCELADO' && pedido.status !== 'CONCLUIDO' ?
-        <button 
-            className={`card-btn btn-${statusClasses[pedido.status]}`}
-            onClick={(e) => {
-                e.stopPropagation();
-                onStatusChange(pedido.id, pedido.status);
-            }}
-        >
-        {buttonText[pedido.status]}
-        </button> : null}
-        
+        <div className={`div-btn-${pedido.status}`}>
+            <div className='div-btn'>
+                <button onClick={() => onStatusChange(pedido.id, "PENDENTE")}>Preparar</button>
+                <button onClick={() => onStatusChange(pedido.id, "PREPARANDO")}>Concluido</button>
+            </div>
+        </div>
     </div>
     )
 }

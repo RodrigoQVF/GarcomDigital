@@ -1,6 +1,7 @@
 .menu-card {
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 .menu-btns {
@@ -8,16 +9,18 @@
     flex-direction: column;
     gap: 5px;
     position: absolute; 
-
-
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
 
     background-color: #202024; 
     border: 1px solid #29292e;
     border-radius: 4px;
     padding: 8px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
-    z-index: 10; 
-    }
+    z-index: 100;
+    min-width: 120px;
+}
 
 .menu-btns button {
   background: transparent;
@@ -30,5 +33,21 @@
 }
 
 .menu-btns button:hover {
+  background-color: #29292e;
+}
+
+.menu-openbtn{
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.menu-openbtn:hover {
   background-color: #29292e;
 }
