@@ -6,6 +6,7 @@
   flex-direction: column;
   border-left: 5px solid #ff9000;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  touch-action: none;
 }
 
 .card-preparando {
@@ -65,22 +66,37 @@
   transition: background-color 0.2s;
   font-size: 14px;
 }
+.div-btn {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-top: 10px;
+}
 
+.div-btn button {
+  flex: 1;
+  color: #121214;
+  padding: 12px 8px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  font-size: 14px;
+}
 
-.btn-pendente {
+.div-btn button:hover {
+  opacity: 0.8;
+}
+
+.div-btn button:first-child {
   background-color: #ff9000;
-  color: #121214;
-}   
-
-.btn-pendente:hover {
-  background-color: #de7f00;
 }
 
-.btn-preparando {
+.div-btn button:last-child {
   background-color: #04d361;
-  color: #121214;
 }
 
-.btn-preparando:hover {
-  background-color: #029e47;
+.div-btn-CANCELADO {
+  display: none;
 }
