@@ -13,6 +13,7 @@ import {
 import './Dashboard.css';
 import { type Pedido, calcularPrecoTotal, type statusPedido } from '../../interfaces/types'
 import Cards from '../../components/Cards/Cards'
+import ModalConfirmacao from '../../components/ModalConfirmacao/ModalConfirmacao'
 
 const itensPedido1 = [
     { nome: 'Burger Artesanal', quantidade: 2, precoUnitario: 1350 },
@@ -79,6 +80,8 @@ function DroppableColumn({ status, className, children }: DroppableColumnProps) 
 export default function Dashboard() {
   const [pedidos, setPedidos] = useState<Pedido[]>(PEDIDOS_INICIAIS);
   const [activeId, setActiveId] = useState<string | number | null>(null);
+  const [filtroHistorico, setFiltroHistorico] = useState<'CONCLUIDO' | 'CANCELADO' | null>(null);
+  const [confirmCancel, setConfirmCancel] = useState<string | number | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -89,17 +92,30 @@ export default function Dashboard() {
     useSensor(TouchSensor, {
       activationConstraint: {
         delay: 200,
-        tolerance: 5,
+        tolerance: 5, 
       },
     })
   );
 
-  const alterarStatus = (id: string | number, statusAtual: statusPedido) => {
+  const executarCancelamento = (id: string | number) => {
+    setPedidos(pedidos.map(p => p.id === id ? { ...p, status: 'CANCELADO' } : p));
+  };
+
+  const alterarStatus = (id: string | number, statusAtual: statusPedido | 'CANCELAR') => {
+    if (statusAtual === 'CANCELADO' || statusAtual === 'CONCLUIDO') {
+      return; // Imutáveis
+    }
+    if (statusAtual === 'CANCELAR') {
+      setConfirmCancel(id);
+      return;
+    }
     if (statusAtual === 'PENDENTE') {
       setPedidos(pedidos.map(p => p.id === id ? { ...p, status: 'PREPARANDO' } : p));
-    } 
+      return;
+    }
     if (statusAtual === 'PREPARANDO') {
-        setPedidos(pedidos.map(p => p.id === id ? { ...p, status: 'CONCLUIDO'} : p));
+      setPedidos(pedidos.map(p => p.id === id ? { ...p, status: 'CONCLUIDO'} : p));
+      return;
     }
   };
 
@@ -115,6 +131,11 @@ export default function Dashboard() {
 
     const id = active.id;
     const novoStatus = over.id as statusPedido;
+
+    const pedidoOriginal = pedidos.find(p => p.id === id);
+    if (pedidoOriginal && (pedidoOriginal.status === 'CANCELADO' || pedidoOriginal.status === 'CONCLUIDO')) {
+      return;
+    }
 
     setPedidos(prevPedidos => 
       prevPedidos.map(p => p.id === id ? { ...p, status: novoStatus } : p)
@@ -138,9 +159,23 @@ export default function Dashboard() {
             <h2>GarçomDigital</h2>
             <span className="badge-kds">Painel KDS</span>
           </div>
-          <div className="kds-info">
-            <span className="status-dot"></span>
-            <span>Cozinha Conectada</span>
+          <div className="kds-header-actions">
+            <button 
+              className={`kds-btn-header btn-concluidos ${filtroHistorico === 'CONCLUIDO' ? 'active' : ''}`}
+              onClick={() => setFiltroHistorico(filtroHistorico === 'CONCLUIDO' ? null : 'CONCLUIDO')}
+            >
+              📁 Concluídos ({concluidos.length})
+            </button>
+            <button 
+              className={`kds-btn-header btn-cancelados ${filtroHistorico === 'CANCELADO' ? 'active' : ''}`}
+              onClick={() => setFiltroHistorico(filtroHistorico === 'CANCELADO' ? null : 'CANCELADO')}
+            >
+              🗑️ Cancelados ({cancelados.length})
+            </button>
+            <div className="kds-info">
+              <span className="status-dot"></span>
+              <span>Cozinha Conectada</span>
+            </div>
           </div>
         </header>
 
@@ -180,43 +215,46 @@ export default function Dashboard() {
               ))}
             </div>
           </DroppableColumn>
-
-          <DroppableColumn 
-            status="CONCLUIDO"
-            className="kds-column column-concluido"
-          >
-              <div className="column-header">
-                  <h3>Pedidos Concluídos ({concluidos.length})</h3>
-              </div>
-              <div className="column-list">
-              {concluidos.map(pedido => (
-                <Cards
-                  key={pedido.id}
-                  pedido={pedido}
-                  onStatusChange={alterarStatus}
-                />
-              ))}
-              </div>
-          </DroppableColumn>
-
-          <DroppableColumn 
-            status="CANCELADO"
-            className="kds-column column-cancelado"
-          >
-              <div className="column-header">
-                  <h3>Pedidos Cancelados ({cancelados.length})</h3>
-              </div>
-              <div className="column-list">
-                  {cancelados.map(pedido => (
-                <Cards
-                  key={pedido.id}
-                  pedido={pedido}
-                  onStatusChange={alterarStatus}
-                />
-              ))}
-              </div>
-          </DroppableColumn>
         </div>
+
+
+        {filtroHistorico && (
+          <div className="kds-drawer-overlay" onClick={() => setFiltroHistorico(null)}>
+            <div className="kds-drawer" onClick={(e) => e.stopPropagation()}>
+              <div className="drawer-header">
+                <h3>
+                  {filtroHistorico === 'CONCLUIDO' ? 'Pedidos Concluídos' : 'Pedidos Cancelados'} 
+                  ({filtroHistorico === 'CONCLUIDO' ? concluidos.length : cancelados.length})
+                </h3>
+                <button className="close-btn" onClick={() => setFiltroHistorico(null)}>×</button>
+              </div>
+              <div className="drawer-content">
+                {(filtroHistorico === 'CONCLUIDO' ? concluidos : cancelados).length === 0 ? (
+                  <div className="drawer-empty">Nenhum pedido nesta lista</div>
+                ) : (
+                  (filtroHistorico === 'CONCLUIDO' ? concluidos : cancelados).map(pedido => (
+                    <Cards
+                      key={pedido.id}
+                      pedido={pedido}
+                      onStatusChange={alterarStatus}
+                    />
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <ModalConfirmacao 
+          isOpen={confirmCancel !== null}
+          onConfirm={() => {
+            if (confirmCancel !== null) {
+              executarCancelamento(confirmCancel);
+              setConfirmCancel(null);
+            }
+          }}
+          onCancel={() => setConfirmCancel(null)}
+        />
       </div>
 
       <DragOverlay dropAnimation={null}>
@@ -228,6 +266,7 @@ export default function Dashboard() {
           />
         ) : null}
       </DragOverlay>
+      
     </DndContext>
   );
 }

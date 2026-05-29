@@ -103,5 +103,141 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
+/* Ações do Header */
+.kds-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.kds-btn-header {
+  background-color: #202024;
+  color: #a8a8b3;
+  border: 1px solid #29292e;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.kds-btn-header:hover {
+  background-color: #29292e;
+  color: #ffffff;
+  border-color: #3e3e4a;
+}
+
+.kds-btn-header.active {
+  background-color: rgba(255, 144, 0, 0.1);
+  color: #ff9000;
+  border-color: #ff9000;
+}
+
+.kds-btn-header.btn-concluidos.active {
+  background-color: rgba(4, 211, 97, 0.1);
+  color: #04d361;
+  border-color: #04d361;
+}
+
+.kds-btn-header.btn-cancelados.active {
+  background-color: rgba(247, 74, 98, 0.1);
+  color: #f74a62;
+  border-color: #f74a62;
+}
+
+/* Slide-over Drawer */
+.kds-drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(10, 10, 12, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.kds-drawer {
+  width: 420px;
+  max-width: 90vw;
+  height: 100%;
+  background-color: #1a1a1e;
+  border-left: 1px solid #29292e;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  animation: drawerSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes drawerSlideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.drawer-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #29292e;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #202024;
+}
+
+.drawer-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.drawer-header .close-btn {
+  background: none;
+  border: none;
+  color: #a8a8b3;
+  font-size: 28px;
+  font-weight: 300;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 4px;
+  transition: color 0.2s;
+}
+
+.drawer-header .close-btn:hover {
+  color: #ffffff;
+}
+
+.drawer-content {
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+.drawer-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  color: #7c7c8a;
+  font-size: 14px;
+  border: 1px dashed #29292e;
+  border-radius: 8px;
+}
+
+
+
+
 
 

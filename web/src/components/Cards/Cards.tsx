@@ -12,14 +12,16 @@ const statusClasses = {
 
 interface pedidoCard {
     pedido: Pedido,
-    onStatusChange: (id: string | number, statusAtual: Pedido['status']) => void;
+    onStatusChange: (id: string | number, statusAtual: Pedido['status'] | 'CANCELAR') => void;
     isOverlay?: boolean;
 }
 
 export default function Cards({pedido, onStatusChange, isOverlay = false}: pedidoCard){
+    const isImutavel = pedido.status === 'CANCELADO' || pedido.status === 'CONCLUIDO';
+
     const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
         id: pedido.id,
-        disabled: isOverlay,
+        disabled: isOverlay || isImutavel,
     });
 
     const style = isOverlay ? {
@@ -29,7 +31,7 @@ export default function Cards({pedido, onStatusChange, isOverlay = false}: pedid
         opacity: 0.3,
         cursor: 'grabbing',
     } : {
-        cursor: 'grab'
+        cursor: isImutavel ? 'default' : 'grab'
     };
 
     return(
@@ -43,7 +45,7 @@ export default function Cards({pedido, onStatusChange, isOverlay = false}: pedid
     >
         <div className="card-top"> 
             <span>#{pedido.id}</span>
-            <span><MenuCard/></span>
+            {!isImutavel && <span><MenuCard onCancel={() => onStatusChange(pedido.id, "CANCELAR")} /></span>}
         </div>
         <div className="card-top">
             <span className="card-mesa">MESA {pedido.mesa}</span>
@@ -56,12 +58,14 @@ export default function Cards({pedido, onStatusChange, isOverlay = false}: pedid
             </p>
             ))}
         </div>
-        <div className={`div-btn-${pedido.status}`}>
-            <div className='div-btn'>
-                <button onClick={() => onStatusChange(pedido.id, "PENDENTE")}>Preparar</button>
-                <button onClick={() => onStatusChange(pedido.id, "PREPARANDO")}>Concluido</button>
+        {!isImutavel && (
+            <div className={`div-btn-${pedido.status}`}>
+                <div className='div-btn'>
+                    <button onClick={() => onStatusChange(pedido.id, "PENDENTE")}>Preparar</button>
+                    <button onClick={() => onStatusChange(pedido.id, "PREPARANDO")}>Concluido</button>
+                </div>
             </div>
-        </div>
+        )}
     </div>
     )
 }

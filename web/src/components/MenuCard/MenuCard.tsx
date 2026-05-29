@@ -2,7 +2,11 @@ import { useState, useEffect, useRef } from 'react'
 import { MoreVertical } from 'lucide-react'
 import './MenuCard.css'
 
-export default function MenuCard () {
+interface MenuCardProps {
+    onCancel?: () => void;
+}
+
+export default function MenuCard ({ onCancel }: MenuCardProps) {
 const [isOpen, setIsOpen] = useState<boolean>(false);
     
     const menuRef = useRef<HTMLDivElement>(null);
@@ -30,11 +34,11 @@ const [isOpen, setIsOpen] = useState<boolean>(false);
             </button>
             {isOpen ? 
             <div className='menu-btns'>
-                <button>
+                <button onClick={() => {
+                    setIsOpen(false);
+                    if (onCancel) onCancel();
+                }}>
                     Cancelar
-                </button>
-                <button>
-                    Concluir
                 </button>
             </div>
             :
